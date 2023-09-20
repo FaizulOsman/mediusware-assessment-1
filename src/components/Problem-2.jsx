@@ -4,6 +4,7 @@ import ModalB from "./ModalB";
 import ModalC from "./ModalC";
 
 const Problem2 = () => {
+  const containerRef = React.useRef(null);
   const [modalAOpen, setModalAOpen] = useState(false);
   const [modalBOpen, setModalBOpen] = useState(false);
   const [modalCOpen, setModalCOpen] = useState(false);
@@ -28,10 +29,13 @@ const Problem2 = () => {
   const fetchContacts = async () => {
     try {
       // Make API request to fetch all contacts
-      const response = await fetch("data.json");
+      const response = await fetch(
+        `https://contact.mediusware.com/api/contacts/?page=${currentPage}`
+      );
       const data = await response.json();
       setContacts(data?.results);
-      setTotalPages(data.total_pages);
+      setTotalPages(data?.count / 20);
+      console.log(data?.count / 20);
     } catch (error) {
       console.error("Error fetching contacts:", error);
     }
@@ -93,7 +97,7 @@ const Problem2 = () => {
   };
 
   const handleScroll = (event) => {
-    const { scrollTop, clientHeight, scrollHeight } = event.target;
+    const { scrollTop, clientHeight, scrollHeight } = containerRef.current;
 
     // Check if scrolled to the bottom of the modal
     if (scrollTop + clientHeight >= scrollHeight) {
@@ -126,7 +130,7 @@ const Problem2 = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container" ref={containerRef}>
       <div className="row justify-content-center mt-5">
         <h4 className="text-center text-uppercase mb-5">Problem-2</h4>
 
