@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import ModalA from "./ModalA";
+import ModalB from "./ModalB";
+import ModalC from "./ModalC";
 
 const Problem2 = () => {
   const [modalAOpen, setModalAOpen] = useState(false);
@@ -24,11 +27,9 @@ const Problem2 = () => {
   const fetchContacts = async () => {
     try {
       // Make API request to fetch all contacts
-      const response = await fetch(
-        "https://contact.mediusware.com/api/contacts"
-      );
+      const response = await fetch("data.json");
       const data = await response.json();
-      setContacts(data.contacts);
+      setContacts(data?.results);
       setTotalPages(data.total_pages);
     } catch (error) {
       console.error("Error fetching contacts:", error);
@@ -41,7 +42,7 @@ const Problem2 = () => {
     // Filter by search query
     if (searchQuery) {
       filtered = filtered.filter((contact) =>
-        contact.name.toLowerCase().includes(searchQuery.toLowerCase())
+        contact.country.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
@@ -58,6 +59,7 @@ const Problem2 = () => {
     setModalBOpen(false);
     setModalCOpen(false);
     setCurrentPage(1);
+    setSearchQuery("");
   };
 
   const openModalB = () => {
@@ -65,6 +67,7 @@ const Problem2 = () => {
     setModalBOpen(true);
     setModalCOpen(false);
     setCurrentPage(1);
+    setSearchQuery("United States");
   };
 
   const openModalC = () => {
@@ -109,7 +112,7 @@ const Problem2 = () => {
       <ul>
         {contactsToDisplay.map((contact) => (
           <li key={contact.id} onClick={openModalC}>
-            {contact.name}
+            {contact.phone}
           </li>
         ))}
       </ul>
@@ -141,190 +144,47 @@ const Problem2 = () => {
 
       {/* Modal A */}
       {modalAOpen && (
-        <div className="modal" style={{ display: "block" }}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Modal A</h5>
-              </div>
-              <div className="modal-body">
-                <div className="form-group">
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Search..."
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                  />
-                </div>
-                <div className="form-check">
-                  <input
-                    type="checkbox"
-                    className="form-check-input"
-                    id="onlyEvenIdCheckbox"
-                    checked={onlyEvenId}
-                    onChange={handleCheckboxChange}
-                  />
-                  <label
-                    className="form-check-label"
-                    htmlFor="onlyEvenIdCheckbox"
-                  >
-                    Only even ID
-                  </label>
-                </div>
-                <div className="contact-list" onScroll={handleScroll}>
-                  {renderContactList()}
-                </div>
-              </div>
-              <div className="modal-footer">
-                <button
-                  className="btn btn-primary"
-                  type="button"
-                  onClick={openModalA}
-                  style={{ backgroundColor: "#46139f" }}
-                >
-                  All Contacts
-                </button>
-                <button
-                  className="btn btn-primary"
-                  type="button"
-                  onClick={openModalB}
-                  style={{ backgroundColor: "#ff7f50" }}
-                >
-                  US Contacts
-                </button>
-                <button
-                  className="btn btn-primary"
-                  type="button"
-                  onClick={closeModal}
-                  style={{
-                    backgroundColor: "#46139f",
-                    color: "white",
-                    border: "1px solid #46139f",
-                  }}
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ModalA
+          searchQuery={searchQuery}
+          handleSearchChange={handleSearchChange}
+          onlyEvenId={onlyEvenId}
+          handleCheckboxChange={handleCheckboxChange}
+          handleScroll={handleScroll}
+          openModalA={openModalA}
+          openModalB={openModalB}
+          closeModal={closeModal}
+          renderContactList={renderContactList}
+        />
       )}
 
       {/* Modal B */}
       {modalBOpen && (
-        <div className="modal" style={{ display: "block" }}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Modal B</h5>
-              </div>
-              <div className="modal-body">
-                <div className="form-group">
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Search..."
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                  />
-                </div>
-                <div className="form-check">
-                  <input
-                    type="checkbox"
-                    className="form-check-input"
-                    id="onlyEvenIdCheckbox"
-                    checked={onlyEvenId}
-                    onChange={handleCheckboxChange}
-                  />
-                  <label
-                    className="form-check-label"
-                    htmlFor="onlyEvenIdCheckbox"
-                  >
-                    Only even ID
-                  </label>
-                </div>
-                <div className="contact-list" onScroll={handleScroll}>
-                  {renderContactList()}
-                </div>
-              </div>
-              <div className="modal-footer">
-                <button
-                  className="btn btn-primary"
-                  type="button"
-                  onClick={openModalA}
-                  style={{ backgroundColor: "#46139f" }}
-                >
-                  All Contacts
-                </button>
-                <button
-                  className="btn btn-primary"
-                  type="button"
-                  onClick={openModalB}
-                  style={{ backgroundColor: "#ff7f50" }}
-                >
-                  US Contacts
-                </button>
-                <button
-                  className="btn btn-primary"
-                  type="button"
-                  onClick={closeModal}
-                  style={{
-                    backgroundColor: "#46139f",
-                    color: "white",
-                    border: "1px solid #46139f",
-                  }}
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ModalB
+          searchQuery={searchQuery}
+          handleSearchChange={handleSearchChange}
+          onlyEvenId={onlyEvenId}
+          handleCheckboxChange={handleCheckboxChange}
+          handleScroll={handleScroll}
+          openModalA={openModalA}
+          openModalB={openModalB}
+          closeModal={closeModal}
+          renderContactList={renderContactList}
+        />
       )}
 
       {/* Modal C */}
       {modalCOpen && (
-        <div className="modal" style={{ display: "block" }}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Modal C</h5>
-              </div>
-              <div className="modal-body">{/* Contact details */}</div>
-              <div className="modal-footer">
-                <button
-                  className="btn btn-primary"
-                  type="button"
-                  onClick={openModalA}
-                  style={{ backgroundColor: "#46139f" }}
-                >
-                  All Contacts
-                </button>
-                <button
-                  className="btn btn-primary"
-                  type="button"
-                  onClick={openModalB}
-                  style={{ backgroundColor: "#ff7f50" }}
-                >
-                  US Contacts
-                </button>
-                <button
-                  className="btn btn-primary"
-                  type="button"
-                  onClick={closeModal}
-                  style={{
-                    backgroundColor: "#46139f",
-                    color: "white",
-                    border: "1px solid #46139f",
-                  }}
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ModalC
+          searchQuery={searchQuery}
+          handleSearchChange={handleSearchChange}
+          onlyEvenId={onlyEvenId}
+          handleCheckboxChange={handleCheckboxChange}
+          handleScroll={handleScroll}
+          openModalA={openModalA}
+          openModalB={openModalB}
+          closeModal={closeModal}
+          renderContactList={renderContactList}
+        />
       )}
     </div>
   );
