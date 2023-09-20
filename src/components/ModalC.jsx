@@ -1,16 +1,7 @@
 import React from "react";
 
-const ModalC = ({
-  searchQuery,
-  handleSearchChange,
-  onlyEvenId,
-  handleCheckboxChange,
-  handleScroll,
-  openModalA,
-  openModalB,
-  closeModal,
-  renderContactList,
-}) => {
+const ModalC = ({ openModalA, openModalB, closeModal, contactDetails }) => {
+  console.log(contactDetails);
   return (
     <div>
       <div className="modal" style={{ display: "block" }}>
@@ -19,7 +10,10 @@ const ModalC = ({
             <div className="modal-header">
               <h5 className="modal-title">Modal C</h5>
             </div>
-            <div className="modal-body">{/* Contact details */}</div>
+            <div className="modal-body">
+              <p>Country: {contactDetails?.country?.name}</p>
+              <p>Phone: {contactDetails?.phone}</p>
+            </div>
             <div className="modal-footer">
               <button
                 className="btn btn-primary"

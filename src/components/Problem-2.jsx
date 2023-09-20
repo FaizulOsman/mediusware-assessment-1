@@ -13,6 +13,7 @@ const Problem2 = () => {
   const [onlyEvenId, setOnlyEvenId] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const [contactDetails, setContactDetails] = useState({});
 
   useEffect(() => {
     // Fetch all contacts from the API
@@ -70,10 +71,11 @@ const Problem2 = () => {
     setSearchQuery("United States");
   };
 
-  const openModalC = () => {
+  const openModalC = (contact) => {
     setModalAOpen(false);
     setModalBOpen(false);
     setModalCOpen(true);
+    setContactDetails(contact);
   };
 
   const closeModal = () => {
@@ -111,7 +113,11 @@ const Problem2 = () => {
     return (
       <ul>
         {contactsToDisplay.map((contact) => (
-          <li key={contact.id} onClick={openModalC}>
+          <li
+            style={{ cursor: "pointer", marginTop: "6px" }}
+            key={contact.id}
+            onClick={() => openModalC(contact)}
+          >
             {contact.phone}
           </li>
         ))}
@@ -175,15 +181,10 @@ const Problem2 = () => {
       {/* Modal C */}
       {modalCOpen && (
         <ModalC
-          searchQuery={searchQuery}
-          handleSearchChange={handleSearchChange}
-          onlyEvenId={onlyEvenId}
-          handleCheckboxChange={handleCheckboxChange}
-          handleScroll={handleScroll}
           openModalA={openModalA}
           openModalB={openModalB}
           closeModal={closeModal}
-          renderContactList={renderContactList}
+          contactDetails={contactDetails}
         />
       )}
     </div>
